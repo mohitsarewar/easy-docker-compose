@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  zookeeper:
+    image: zookeeper:latest
+    ports:
+      - "2181:2181"
+    volumes:
+      - ./zookeeper-data:/data
+      - ./zookeeper-logs:/datalog

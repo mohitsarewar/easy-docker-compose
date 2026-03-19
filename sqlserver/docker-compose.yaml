@@ -1,11 +1,14 @@
 version: "3.9"
 
+# SQL Server 2022 adds native ARM64 (M-chip) support.
+# The :latest tag points to 2019 which is x86-only.
 services:
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:latest
+    image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
-      SA_PASSWORD: my_password
-      ACCEPT_EULA: Y
+      SA_PASSWORD: My_Password123
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Developer
     ports:
       - "1433:1433"
     volumes:

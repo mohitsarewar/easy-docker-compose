@@ -1,12 +1,21 @@
 version: "3.9"
 
+# Fixed: /usr/local/airflow was the old path; /opt/airflow is correct for airflow 2.x+.
+# standalone mode starts the webserver, scheduler, and triggerer in one container.
 services:
   airflow:
     image: apache/airflow:latest
+    command: standalone
     environment:
-      AIRFLOW__CORE__FERNET_KEY: "This is a secret key"
-      AIRFLOW__CORE__LOAD_EXAMPLES: "True"
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: sqlite:////opt/airflow/airflow.db
+      AIRFLOW__CORE__FERNET_KEY: ""
+      AIRFLOW__CORE__LOAD_EXAMPLES: "true"
+      _AIRFLOW_DB_MIGRATE: "true"
+      _AIRFLOW_WWW_USER_CREATE: "true"
+      _AIRFLOW_WWW_USER_USERNAME: admin
+      _AIRFLOW_WWW_USER_PASSWORD: admin
     volumes:
-      - ./airflow:/usr/local/airflow
+      - ./airflow:/opt/airflow
     ports:
       - "8080:8080"
