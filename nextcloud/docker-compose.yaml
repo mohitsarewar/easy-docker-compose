@@ -1,0 +1,27 @@
+version: "3.9"
+
+# Self-hosted file storage and collaboration. UI at http://localhost:8080
+services:
+  nextcloud:
+    image: nextcloud:latest
+    ports:
+      - "8080:80"
+    environment:
+      MYSQL_HOST: db
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nextcloud
+      MYSQL_PASSWORD: my_password
+    volumes:
+      - ./nextcloud-data:/var/www/html
+    depends_on:
+      - db
+
+  db:
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: my_root_password
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nextcloud
+      MYSQL_PASSWORD: my_password
+    volumes:
+      - ./mysql-data:/var/lib/mysql

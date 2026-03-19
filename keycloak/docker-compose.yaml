@@ -1,31 +1,32 @@
-version: '3'
+version: "3.9"
 
+# Migrated from the legacy image (quay.io/keycloak/keycloak:legacy) which is x86-only.
+# Keycloak 22+ uses a new start command and has native ARM64 (M-chip) support.
 volumes:
   postgres_data:
-      driver: local
+    driver: local
 
 services:
   postgres:
-      image: postgres
-      volumes:
-        - postgres_data:/var/lib/postgresql/data
-      environment:
-        POSTGRES_DB: keycloak_db
-        POSTGRES_USER: keycloak_db
-        POSTGRES_PASSWORD: password_db
-  keycloak:
-      image: quay.io/keycloak/keycloak:legacy
-      environment:
-        DB_VENDOR: POSTGRES
-        DB_ADDR: postgres
-        DB_DATABASE: keycloak_db
-        DB_USER: keycloak_db
-        DB_SCHEMA: public
-        DB_PASSWORD: password_db
-        KEYCLOAK_USER: user_name
-        KEYCLOAK_PASSWORD: password
-      ports:
-        - 9080:8080
-      depends_on:
-        - postgres
+    image: postgres:16
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak_db
+      POSTGRES_USER: keycloak_user
+      POSTGRES_PASSWORD: keycloak_password
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0
+    command: start-dev
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres/keycloak_db
+      KC_DB_USERNAME: keycloak_user
+      KC_DB_PASSWORD: keycloak_password
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "9080:8080"
+    depends_on:
+      - postgres

@@ -1,0 +1,9 @@
+version: "3.9"
+
+# Lightweight web-based database manager supporting MySQL, PostgreSQL, SQLite, and more.
+# UI at http://localhost:8080
+services:
+  adminer:
+    image: adminer:latest
+    ports:
+      - "8080:8080"

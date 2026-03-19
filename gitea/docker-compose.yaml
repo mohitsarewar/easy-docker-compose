@@ -1,0 +1,15 @@
+version: "3.9"
+
+# Lightweight self-hosted Git service. UI at http://localhost:3000
+# SSH on port 222 to avoid conflict with host SSH.
+services:
+  gitea:
+    image: gitea/gitea:latest
+    ports:
+      - "3000:3000"
+      - "222:22"
+    environment:
+      USER_UID: 1000
+      USER_GID: 1000
+    volumes:
+      - ./gitea-data:/data

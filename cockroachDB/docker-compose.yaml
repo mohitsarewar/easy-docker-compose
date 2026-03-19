@@ -1,12 +1,13 @@
 version: "3.9"
 
+# start-single-node --insecure is required; without a start command the container exits immediately.
+# UI available at http://localhost:8080
 services:
   cockroachdb:
     image: cockroachdb/cockroach:latest
-    environment:
-      COCKROACH_USER: my_user
-      COCKROACH_PASSWORD: my_password
+    command: start-single-node --insecure
     ports:
       - "26257:26257"
+      - "8080:8080"
     volumes:
       - ./cockroachdb-data:/cockroach/cockroach-data

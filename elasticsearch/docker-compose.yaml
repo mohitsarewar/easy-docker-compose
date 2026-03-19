@@ -1,7 +1,15 @@
 version: "3.9"
 
+# discovery.type=single-node is required to start without a cluster.
+# xpack.security.enabled=false disables TLS for local development.
 services:
   elasticsearch:
     image: elasticsearch:8.10.2
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "false"
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
     ports:
       - "9200:9200"
+    volumes:
+      - ./es-data:/usr/share/elasticsearch/data

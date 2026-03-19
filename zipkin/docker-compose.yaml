@@ -1,0 +1,8 @@
+version: "3.9"
+
+# Distributed tracing system. UI at http://localhost:9411
+services:
+  zipkin:
+    image: openzipkin/zipkin:latest
+    ports:
+      - "9411:9411"

@@ -1,10 +1,37 @@
 version: "3.9"
 
+# Graylog requires MongoDB and Elasticsearch to function.
+# The previous file was missing these dependencies and would not start.
+# Default login: admin / admin
 services:
-  graylog:
-    image: graylog2/graylog:latest
+  mongodb:
+    image: mongo:6.0
+    volumes:
+      - ./mongo-data:/data/db
+
+  elasticsearch:
+    image: elasticsearch:7.17.15
     environment:
-      GRAYLOG_ROOT_PASSWORD_SHA2: "This is a secret password"
+      discovery.type: single-node
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+      xpack.security.enabled: "false"
+    volumes:
+      - ./es-data:/usr/share/elasticsearch/data
+
+  graylog:
+    image: graylog/graylog:5.1
+    environment:
+      # CHANGE THIS: generate with: echo -n yourpassword | sha256sum
+      GRAYLOG_PASSWORD_SECRET: somepasswordpepper16chars
+      # Default password: admin (sha256 of "admin")
+      GRAYLOG_ROOT_PASSWORD_SHA2: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+      GRAYLOG_HTTP_EXTERNAL_URI: "http://127.0.0.1:9000/"
+      GRAYLOG_MONGODB_URI: mongodb://mongodb/graylog
+      GRAYLOG_ELASTICSEARCH_HOSTS: http://elasticsearch:9200
     ports:
       - "9000:9000"
-      - "5000:5000"
+      - "12201:12201/udp"
+      - "1514:1514"
+    depends_on:
+      - mongodb
+      - elasticsearch

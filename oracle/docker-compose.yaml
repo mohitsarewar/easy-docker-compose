@@ -1,12 +1,16 @@
 version: "3.9"
 
+# Uses gvenzl/oracle-xe: free Oracle XE image with native ARM64 (M-chip) support.
+# The official oracle/database image is x86-only and requires Oracle Container Registry login.
 services:
   oracle:
-    image: oracle/database:enterprise-edition-latest
+    image: gvenzl/oracle-xe:21-slim-faststart
     environment:
-      ORACLE_SID: orcl
-      ORACLE_PWD: my_password
+      ORACLE_PASSWORD: my_password
+      ORACLE_DATABASE: my_database
+      APP_USER: my_user
+      APP_USER_PASSWORD: my_password
     ports:
       - "1521:1521"
     volumes:
-      - ./oracle-data:/u01/app/oracle/oradata
+      - ./oracle-data:/opt/oracle/oradata

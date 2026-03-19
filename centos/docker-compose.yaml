@@ -1,5 +1,7 @@
 version: "3.9"
+
+# centos:latest pointed to CentOS 8 which reached EOL in December 2021.
+# Using CentOS Stream 9 which is actively maintained and supports ARM64 (M-chip).
 services:
   centos:
-    image: centos:latest
-
+    image: centos:stream9
